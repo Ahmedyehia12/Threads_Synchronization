@@ -1,10 +1,14 @@
 public class Router {
     private int size;
+    private Semaphore sem;
+    private Object connections [] ;
     Router(int size) {
         this.size = size;
+        sem = new Semaphore(size);
+        connections = new Object[size];
     }
-    private Object connections [] = new Object[size];
-    private Semaphore sem = new Semaphore(size);
+
+
     int ind = 0;
     public void connect(Object o) {
         sem.P(); // wait for space

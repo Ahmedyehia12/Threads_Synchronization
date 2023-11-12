@@ -1,7 +1,7 @@
 public class Semaphore {
-    protected  int value = 0;
-    protected Semaphore() { value = 0; }
-    protected Semaphore(int initial) { value = initial; }
+    protected  int value;
+    public Semaphore() { value = 0; }
+    public Semaphore(int initial) { this.value = initial; }
     public synchronized void P(){
         value--; // decrement
         if(value<0){ // if value is negative
