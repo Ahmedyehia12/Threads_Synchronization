@@ -1,0 +1,20 @@
+C1 arrived
+Connection 1: C1 Occupied
+C2 arrived
+Connection 1: C1 login
+Connection 2: C2 Occupied
+Connection 2: C2 login
+C4 arrived and waiting
+C3 arrived and waiting
+Connection 2: C2 performs online activity
+Connection 2: C2 Logged out
+Connection 2: C4 Occupied
+Connection 2: C4 login
+Connection 1: C1 performs online activity
+Connection 1: C1 Logged out
+Connection 1: C3 Occupied
+Connection 1: C3 login
+Connection 2: C4 performs online activity
+Connection 2: C4 Logged out
+Connection 1: C3 performs online activity
+Connection 1: C3 Logged out

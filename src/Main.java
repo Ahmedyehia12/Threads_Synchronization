@@ -1,6 +1,22 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+
+class FileHandler{
+
+    public static void append(String data , String fileName){
+        File file = new File(fileName);
+        try {
+            java.io.FileWriter fr = new java.io.FileWriter(file, true);
+            fr.write(data);
+            fr.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
 
 class Router {
     private final Device[] connections;
@@ -44,15 +60,14 @@ class Semaphore {
     public synchronized void acquire(Device d) {
         value--;
         if (value < 0) {
-            System.out.println(d.getName() + " arrived and waiting");
+            FileHandler.append(d.getName() + " arrived and waiting\n", "output.txt");
             try {
-                wait();
+                wait(); // wait() methods places waiting thread into WAITING state, by pushing it into the waiting queue
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         } else
-            System.out.println(d.getName() + " arrived");
-
+            FileHandler.append(d.getName() + " arrived\n", "output.txt");
 
         for (int i = 0; i < d.getRouter().getMaxConnections(); i++) {
             if (d.getRouter().getConnections()[i] == null) {
@@ -61,21 +76,20 @@ class Semaphore {
                 break;
             }
         }
-        System.out.println("Connection " + d.getConnectionID() + ": " + d.getName() + " Occupied");
+        FileHandler.append("Connection " + d.getConnectionID() + ": " + d.getName() + " Occupied\n","output.txt");
     }
 
     public synchronized void release(Device d) {
         value++;
-
-        System.out.println("Connection " + d.getConnectionID() + ": " + d.getName() + " Logged out");
+        FileHandler.append("Connection " + d.getConnectionID() + ": " + d.getName() + " Logged out\n","output.txt");
         for (int i = 0; i < d.getRouter().getMaxConnections(); i++) {
             if (d.getRouter().getConnections()[i] == d) {
                 d.getRouter().getConnections()[i] = null;
                 break;
             }
         }
-        if (value >= 0)
-            notifyAll();
+        if(value<=0) // if there is still waiting devices
+            notify(); // notify one of them, which is the first one in the queue
     }
 
 }
@@ -115,22 +129,15 @@ class Device implements Runnable {
 
     @Override
     public void run() {
-        router.occupyConnection(this); // hena by3ml print le arrived wa waiting wa occupied
-        System.out.println("Connection " + connectionID + ": " + name + " login");
-
+        router.occupyConnection(this);
+        FileHandler.append("Connection " + connectionID + ": " + name + " login\n","output.txt");
         try {
             Thread.sleep((long) (Math.random() * 1000));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        System.out.println("Connection " + connectionID + ": " + name + " performs online activity");
-
-//        System.out.println("Connection " + index + ": " + name + " Logged out"); tl3taha fel release wa 5leto bya5od device
-
+        FileHandler.append("Connection " + connectionID + ": " + name + " performs online activity\n","output.txt");
         router.releaseConnection(this);
-
-
     }
 }
 
